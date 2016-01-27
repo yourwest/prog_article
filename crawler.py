@@ -11,25 +11,23 @@ urls = ['http://www.colta.ru/authors/346',
 
 MAIN_URL = 'http://www.colta.ru'
 
-authors = []
-for url in urls:
-        author_number = re.search('/([0-9]+)\\b', url)
-        if author_number is not None:
-                author = author_number.group(1)
-        authors.append(author)
-        try:
-                os.mkdir(author)
-        except:
-                continue
 
 def collect_urls():
     article_urls = []
     for url in urls:
         page_content = requests.get(url).content.decode('utf8')
         article_url = re.findall(r'/articles/cinema/\d+', page_content, flags=re.DOTALL)
+        author_number = re.search('/([0-9]+)\\b', url)
+        if author_number is not None:
+                author = author_number.group(1)
         for i in set(article_url):
             article_urls.append(MAIN_URL + i)
-    return article_urls
+        article_info = (author, article_urls)
+        try:
+                os.mkdir(author)
+        except:
+                continue
+    return article_info
     
 
 @asyncio.coroutine
