@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import re
 import requests
+import os
 
 
 urls = ['http://www.colta.ru/authors/346',
@@ -9,6 +10,14 @@ urls = ['http://www.colta.ru/authors/346',
         'http://www.colta.ru/authors/23']
 
 MAIN_URL = 'http://www.colta.ru'
+
+authors = []
+for url in urls:
+        author_number = re.search('/([0-9]+)\\b', url)
+        if author_number is not None:
+                author = author_number.group(1)
+        authors.append(author)
+        os.mkdir(author)
 
 def collect_urls():
     article_urls = []
@@ -18,7 +27,7 @@ def collect_urls():
         for i in set(article_url):
             article_urls.append(MAIN_URL + i)
     return article_urls
-
+    
 
 @asyncio.coroutine
 def get(*args, **kwargs):
@@ -28,12 +37,12 @@ def get(*args, **kwargs):
 
 def parse_html(page):
     # Полина часть
-    # TODO: Вытащить текст, тему и просмотры. Вернуть кортеж (тема, просмотры, текст)
+    # TODO: Вытащить текст, тему и просмотры. Вернуть кортеж (тема, просмотры, текст, автор)
     pass
 
 
 @asyncio.coroutine
-def downlaod_html(url):
+def downlaod_html(url, author):
     with (yield from sem):
         page = yield from get(url)
         print(url)
@@ -41,7 +50,11 @@ def downlaod_html(url):
 
     # Гуля
     # TODO: Сохранить articles. Название файла - тема текста
-
+    topic = articles[0]
+    text =  articles[2]
+    article = open('./' + author + '/' + topic + '.txt', 'w', encoding='utf-8')
+    article.write(text)
+    article.close()
 
 # С помощью семафоров ограничиваем количество одновременных запросов (чтобы сайты не банили на пример)
 sem = asyncio.Semaphore(1000)
