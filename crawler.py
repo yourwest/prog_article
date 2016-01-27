@@ -17,7 +17,10 @@ for url in urls:
         if author_number is not None:
                 author = author_number.group(1)
         authors.append(author)
-        os.mkdir(author)
+        try:
+                os.mkdir(author)
+        except:
+                continue
 
 def collect_urls():
     article_urls = []
