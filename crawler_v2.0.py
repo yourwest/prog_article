@@ -24,7 +24,6 @@ def collect_urls(url):
     return article_urls
 
 
-
 def parse_html(page):
     article_name = re.findall('<section class="article.*?<h1>(.*?)</h1>', page, flags=re.DOTALL)
     article_authors = re.findall('<a href="/authors/(\\d+)">(.*?)</a>', page, flags=re.DOTALL)
