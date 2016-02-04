@@ -1,7 +1,6 @@
 import re
 import requests
 import os
-import urllib.request as urlr
 
 urls = ['http://www.colta.ru/authors/346',
         'http://www.colta.ru/authors/26',
@@ -47,9 +46,8 @@ for url in urls:
 
     article_urls = collect_urls(url)
     for article_url in article_urls:
-            article_page = urlr.urlopen(article_url)
-            page_content = article_page.read().decode('utf-8')
-            info = parse_html(page_content)
-            article = open('./' + author + '/' + info[0] + '.txt', 'w', encoding='utf-8')
-            article.write(info[2])
-            article.close()
+        article_page = requests.get(article_url).content.decode('utf8')
+        info = parse_html(article_page)
+        article = open('./' + author + '/' + info[0] + '.txt', 'w', encoding='utf-8')
+        article.write(info[2])
+        article.close()
