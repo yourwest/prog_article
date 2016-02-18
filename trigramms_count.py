@@ -1,6 +1,3 @@
-__author__ = 'Bogdan'
-__email__ = 'evstrat.bg@gmail.com'
-
 import re
 import os
 
