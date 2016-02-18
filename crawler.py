@@ -19,7 +19,7 @@ def collect_urls():
         for i in set(article_url):
             article_urls.append(MAIN_URL + i)
     return article_urls
-    
+
 
 @asyncio.coroutine
 def get(*args, **kwargs):
