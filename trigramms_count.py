@@ -81,6 +81,8 @@ files_26 = os.listdir(path='./26/')
 
 # Отдельно собираем массивы данных для трех авторов.
 data_471 = []
+data_471_test = []
+l = len(files_471)
 for file in files_471:
     if file.endswith('.txt'):
         file_path = './471/' + file
@@ -88,9 +90,15 @@ for file in files_471:
         file_data = [471]
         for i in d:
             file_data.append(d[i])
-        data_471.append(file_data)
+        if l > 4:
+            data_471.append(file_data)
+        else:
+            data_471_test.append(file_data)
+    l -= 1
 
 data_66 = []
+data_66_test = []
+l = len(files_66)
 for file in files_66:
     if file.endswith('.txt'):
         file_path = './66/' + file
@@ -98,9 +106,15 @@ for file in files_66:
         file_data = [66]
         for i in d:
             file_data.append(d[i])
-        data_66.append(file_data)
+        if l > 4:
+            data_66.append(file_data)
+        else:
+            data_66_test.append(file_data)
+    l -= 1
 
 data_26 = []
+data_26_test = []
+l = len(files_26)
 for file in files_26:
     if file.endswith('.txt'):
         file_path = './26/' + file
@@ -108,7 +122,11 @@ for file in files_26:
         file_data = [26]
         for i in d:
             file_data.append(d[i])
-        data_26.append(file_data)
+        if l > 4:
+            data_26.append(file_data)
+        else:
+            data_26_test.append(file_data)
+    l -= 1
 
 # Собираем все вместе и записываев в csv.
 data = open('data.csv', 'w', encoding='utf-8')
@@ -118,3 +136,11 @@ for k in all_data:
         data.write(str(l) + ';')
     data.write('\r\n')
 data.close()
+
+data_test = open('data_test.csv', 'w', encoding='utf-8')
+all_data_test = np.vstack((data_471_test, data_66_test, data_26_test))
+for k in all_data_test:
+    for l in k:
+        data_test.write(str(l) + ';')
+    data_test.write('\r\n')
+data_test.close()
