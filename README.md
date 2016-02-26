@@ -8,3 +8,5 @@ articles_new.zip - архив с текстами.
 trigram_freqs.png - график с частотами триграм.
 
 data.csv - данные для машинного обучения.
+
+dissimilarity.py - делает вычисления как в статье.
