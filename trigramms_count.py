@@ -104,7 +104,7 @@ for file in files_471:
         file_data = [471]
         for i in d:
             file_data.append(d[i])
-        if l > 4:
+        if l > 10:
             data_471.append(file_data)
         else:
             data_471_test.append(file_data)
@@ -120,7 +120,7 @@ for file in files_66:
         file_data = [66]
         for i in d:
             file_data.append(d[i])
-        if l > 4:
+        if l > 10:
             data_66.append(file_data)
         else:
             data_66_test.append(file_data)
@@ -136,7 +136,7 @@ for file in files_26:
         file_data = [26]
         for i in d:
             file_data.append(d[i])
-        if l > 4:
+        if l > 10:
             data_26.append(file_data)
         else:
             data_26_test.append(file_data)
