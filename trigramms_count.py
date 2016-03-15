@@ -14,10 +14,15 @@ def text_to_words(text):
 def word(sentence):
     return sentence.lower().split()
 
-# Собираем все триграмы из всех текстов.
+# Собираем все триграммы из всех текстов.
+# Здесь и дальше все переменные названы для триграмм, потому что мы сначала рассматривали только их,
+# а биграммы и четырех граммы добавили потом.
 def collect_trigrams(paths):
     all_texts = ''
     trigramms = set()
+    #fourgrams_list = open('fourgrams_list.csv', 'w', encoding='utf-8')
+    #trigrams_list = open('trigrams_list.csv', 'w', encoding='utf-8')
+    #bigrams_list = open('trigrams_list.csv', 'w', encoding='utf-8')
     for path in paths:
         files = os.listdir(path=path)
         for file_name in files:
@@ -32,11 +37,20 @@ def collect_trigrams(paths):
                         if len(stripped_word) >= 3:
                             if len(stripped_word) == 3:
                                 trigramms.add(stripped_word)
+                                #fourgrams_list.write(stripped_word + ';')
+                                #trigrams_list.write(stripped_word + ';')
+                                #bigrams_list.write(stripped_word + ';')
                             else:
                                 s = 0
                                 for i in range(3, len(stripped_word) + 1):
                                     trigramms.add(stripped_word[s:i])
+                                    #fourgrams_list.write(stripped_word[s:i] + ';')
+                                    #trigrams_list.write(stripped_word[s:i] + ';')
+                                    #bigrams_list.write(stripped_word[s:i] + ';')
                                     s += 1
+    #fourgrams_list.close()
+    #trigrams_list.close()
+    #bigrams_list.close()                                
     freqs = []
     final_trigrams = []
     # Оставляем только те триграмы, частоты которых превышает порог.
@@ -45,7 +59,7 @@ def collect_trigrams(paths):
         amount = len(find)
         freq = amount / len(all_texts.split())
         freqs.append(freq)
-        if freq > 0.0001:  # С таким пороговым значением получается примерно половина всех найденных триграм.
+        if freq > 0.001:  # Этот порог меняли и выбирали наилучший результат.
             final_trigrams.append(trigram)
     # Строили график, чтобы определить пороговое значение для частоты.        
     # plt.plot(sorted(freqs)) 
