@@ -1,6 +1,10 @@
 __author__ = 'angelinaprisyazhnaya'
 
 import csv
+import numpy as np
+from sklearn import metrics
+from sklearn.preprocessing import label_binarize
+import matplotlib.pyplot as plt
 
 #Читаем csv и отдельно записываем данные для каждого автора.
 f = open('data.csv', 'r', encoding='utf-8')
@@ -55,26 +59,66 @@ def find_max_dissimilarity(d_i, data):
     return max_dissimilarity
 
 
+#Считаем вероятность авторства.
 def authorship_verification(test_text, known_texts):
-    threshold = 0.95
+    threshold = 0.9
+    c = 0.1
     ratios = []
     for text in known_texts:
         ratio = count_dissimilarity(test_text, text) / find_max_dissimilarity(text, known_texts)
-    ratios.append(ratio)
-    summ = 0
-    for i in ratios:
-        summ += i
-    mean_ratio = summ / len(ratios)
-    print(mean_ratio)
-    if mean_ratio < threshold:
-        answer = 'Authorship is verified.'
+        ratios.append(ratio)
+    mean_ratio = np.mean(ratios)
+    if mean_ratio == threshold:
+        probability = 0.5
+    elif mean_ratio <= threshold - c:
+        probability = 1
+    elif mean_ratio >= threshold + c:
+        probability = 0
     else:
-        answer = 'Authorship is not verified.'
-    return answer
+        probability = (threshold + c - mean_ratio) / (2 * c)
+    answer = 'Probability of authorship is ' + str(probability)
+    return answer, probability
 
-
+#Собираем массивы для ROC-кривых.
+y_test = []
+y_scores = []
 for i in data_test:
-    print(authorship_verification(i, data_471))
-    print(authorship_verification(i, data_66))
-    print(authorship_verification(i, data_26))
-    print('')
+    y_score = []
+    y_test.append(float(i[0]))
+    result_471 = authorship_verification(i, data_471)
+    y_score.append(result_471[1])
+    print(result_471[0])
+    result_66 = authorship_verification(i, data_66)
+    y_score.append(result_66[1])
+    print(result_66[0])
+    result_26 = authorship_verification(i, data_26)
+    y_score.append(result_26[1])
+    print(result_26[0])
+    y_scores.append(y_score)
+
+#Преобразовываем эти массивы.
+y_test = label_binarize(y_test, classes=[471.0, 66.0, 26.0])
+n_classes = y_test.shape[1]
+y = np.array(y_test)
+scores = np.array(y_scores)
+
+#Считаем параметры для ROC-кривых.
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+for i in range(n_classes):
+    fpr[i], tpr[i], _ = metrics.roc_curve(y_test[:, i], scores[:, i])
+    roc_auc[i] = metrics.auc(fpr[i], tpr[i])
+
+#Строим ROC-кривые.
+plt.figure()
+for i in range(n_classes):
+    plt.plot(fpr[i], tpr[i], label='ROC curve of class {0} (area = {1:0.3f})'
+                                   ''.format(i, roc_auc[i]))
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc="lower right")
+plt.show()
