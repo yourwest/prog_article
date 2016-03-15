@@ -52,7 +52,7 @@ for url in urls:
         if info is not None:
             if info[0].endswith('»'):
                 continue
-            if len(info[2].split()) < 650:
+            if len(info[2].split()) < 500:
                 continue
             else:
                 article = open('./' + author + '/' + info[0] + '.txt', 'w', encoding='utf-8')
