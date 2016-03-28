@@ -1,6 +1,6 @@
-# prog_article
+# Authorship verification
 
-**Подробное описание: Wiki-Description.**
+*Подробное описание: Wiki-Description.*
 
 crawler_v2.0.py - собирает тексты.
 
