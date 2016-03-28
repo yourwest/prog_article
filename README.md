@@ -1,4 +1,7 @@
 # prog_article
+
+Подробное описание: Wiki-Description.
+
 crawler_v2.0.py - собирает тексты.
 
 trigramms_count - обрабатывает тексты для машинного обучения.
